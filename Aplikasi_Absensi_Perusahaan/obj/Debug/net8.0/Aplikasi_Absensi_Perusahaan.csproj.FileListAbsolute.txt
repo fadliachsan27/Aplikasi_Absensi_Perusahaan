@@ -1,0 +1,5 @@
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.GeneratedMSBuildEditorConfig.editorconfig
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.AssemblyInfoInputs.cache
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.AssemblyInfo.cs
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.csproj.CoreCompileInputs.cache
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.sourcelink.json
