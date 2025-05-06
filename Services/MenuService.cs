@@ -1,40 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Aplikasi_Absensi_Perusahaan.Services;
 
-namespace Aplikasi_Absensi_Perusahaan.Services
+namespace Aplikasi_Absensi_Perusahaan
 {
-    internal class Menu
+    class MenuService
     {
+        private readonly KaryawanService karyawanService = new KaryawanService();
+        private readonly JobdeskService jobdeskService = new JobdeskService();
+
         public void TampilkanMenu()
         {
+            var daftarKaryawan = karyawanService.GetSampleKaryawan();
             bool lanjut = true;
+
             while (lanjut)
             {
                 Console.Clear();
-                Console.WriteLine("=== SISTEM JOBDESK KARYAWAN ===");
+                Console.WriteLine("=== SISTEM Etos Kerja ===");
                 Console.WriteLine("1. Melihat Jobdesk");
                 Console.WriteLine("2. Melakukan Presensi");
                 Console.WriteLine("3. Mengelola Jobdesk Karyawan");
-                Console.WriteLine("4. Mengelola Data Karyawan")
-                Console.WriteLine("Keluar")
+                Console.WriteLine("4. Mengelola Data Karyawan");
+                Console.WriteLine("5. Penggajihan");
+                Console.WriteLine("Keluar");
                 Console.Write("Pilihan Anda: ");
-                string input = Console.ReadLine();
+                string pilihan = Console.ReadLine();
 
-                switch (input)
+                switch (pilihan)
                 {
                     case "1":
-                        TambahJobdesk();
+                        jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
                         break;
                     case "2":
-                        TampilkanJobdesk();
-                        break;
-                    case "3":
-                        HapusJobdesk();
-                        break;
-                    case "4":
                         lanjut = false;
                         break;
                     default:
@@ -44,12 +41,10 @@ namespace Aplikasi_Absensi_Perusahaan.Services
 
                 if (lanjut)
                 {
-                    Console.WriteLine("\nTekan ENTER untuk kembali ke menu...");
+                    Console.WriteLine("\nTekan ENTER untuk kembali ke menu utama...");
                     Console.ReadLine();
                 }
             }
         }
-        public 
-
     }
 }

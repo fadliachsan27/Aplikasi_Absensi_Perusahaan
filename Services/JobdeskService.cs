@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aplikasi_Absensi_Perusahaan.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Aplikasi_Absensi_Perusahaan.Services
@@ -7,17 +8,19 @@ namespace Aplikasi_Absensi_Perusahaan.Services
     {
         private List<string> jobdeskList = new List<string>();
 
-        public void TampilkanMenu()
+        public void TampilkanMenuJobdesk(List<Karyawan> daftarKaryawan)
         {
             bool lanjut = true;
             while (lanjut)
             {
                 Console.Clear();
-                Console.WriteLine("=== SISTEM JOBDESK KARYAWAN ===");
+                Console.WriteLine("=== MENU JOBDESK KARYAWAN ===");
                 Console.WriteLine("1. Tambah Jobdesk");
                 Console.WriteLine("2. Tampilkan Semua Jobdesk");
                 Console.WriteLine("3. Hapus Jobdesk");
-                Console.WriteLine("4. Keluar");
+                Console.WriteLine("4. Berikan Jobdesk ke Karyawan");
+                Console.WriteLine("5. Lihat Jobdesk Karyawan");
+                Console.WriteLine("6. Kembali");
                 Console.Write("Pilihan Anda: ");
                 string input = Console.ReadLine();
 
@@ -33,6 +36,12 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         HapusJobdesk();
                         break;
                     case "4":
+                        BerikanJobdeskKeKaryawan(daftarKaryawan);
+                        break;
+                    case "5":
+                        TampilkanJobdeskKaryawan(daftarKaryawan);
+                        break;
+                    case "6":
                         lanjut = false;
                         break;
                     default:
@@ -42,7 +51,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
 
                 if (lanjut)
                 {
-                    Console.WriteLine("\nTekan ENTER untuk kembali ke menu...");
+                    Console.WriteLine("\nTekan ENTER untuk kembali...");
                     Console.ReadLine();
                 }
             }
@@ -55,11 +64,11 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             if (!string.IsNullOrWhiteSpace(jobdesk))
             {
                 jobdeskList.Add(jobdesk);
-                Console.WriteLine("✅ Jobdesk ditambahkan.");
+                Console.WriteLine("Jobdesk ditambahkan.");
             }
             else
             {
-                Console.WriteLine("❌ Jobdesk tidak boleh kosong.");
+                Console.WriteLine("Jobdesk tidak boleh kosong.");
             }
         }
 
@@ -71,7 +80,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 return;
             }
 
-            Console.WriteLine("Daftar Jobdesk Karyawan:");
+            Console.WriteLine("Daftar Jobdesk:");
             for (int i = 0; i < jobdeskList.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {jobdeskList[i]}");
@@ -92,12 +101,80 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 }
                 else
                 {
-                    Console.WriteLine("❌ Nomor tidak valid.");
+                    Console.WriteLine("Nomor tidak valid.");
                 }
             }
             else
             {
-                Console.WriteLine("❌ Input bukan angka.");
+                Console.WriteLine("Input bukan angka.");
+            }
+        }
+
+        public void BerikanJobdeskKeKaryawan(List<Karyawan> daftarKaryawan)
+        {
+            Console.WriteLine("Pilih Karyawan:");
+            for (int i = 0; i < daftarKaryawan.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {daftarKaryawan[i].Nama_Karyawan}");
+            }
+
+            Console.Write("Nomor karyawan: ");
+            if (int.TryParse(Console.ReadLine(), out int karyawanIndex))
+            {
+                karyawanIndex--;
+                if (karyawanIndex >= 0 && karyawanIndex < daftarKaryawan.Count)
+                {
+                    TampilkanJobdesk();
+                    Console.Write("Nomor jobdesk yang ingin diberikan: ");
+                    if (int.TryParse(Console.ReadLine(), out int jobdeskIndex))
+                    {
+                        jobdeskIndex--;
+                        if (jobdeskIndex >= 0 && jobdeskIndex < jobdeskList.Count)
+                        {
+                            daftarKaryawan[karyawanIndex].Jobdesks.Add(jobdeskList[jobdeskIndex]);
+                            Console.WriteLine("Jobdesk diberikan!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nomor jobdesk tidak valid.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Nomor karyawan tidak valid.");
+                }
+            }
+        }
+
+        public void TampilkanJobdeskKaryawan(List<Karyawan> daftarKaryawan)
+        {
+            Console.WriteLine("Pilih Karyawan:");
+            for (int i = 0; i < daftarKaryawan.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {daftarKaryawan[i].Nama_Karyawan}");
+            }
+
+            Console.Write("Nomor karyawan: ");
+            if (int.TryParse(Console.ReadLine(), out int index))
+            {
+                index--;
+                if (index >= 0 && index < daftarKaryawan.Count)
+                {
+                    var karyawan = daftarKaryawan[index];
+                    Console.WriteLine($"Jobdesk {karyawan.Nama_Karyawan}:");
+                    if (karyawan.Jobdesks.Count == 0)
+                    {
+                        Console.WriteLine("Belum ada jobdesk.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < karyawan.Jobdesks.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {karyawan.Jobdesks[i]}");
+                        }
+                    }
+                }
             }
         }
     }

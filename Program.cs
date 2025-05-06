@@ -7,8 +7,8 @@ namespace Aplikasi_Absensi_Perusahaan
     {
         static void Main(string[] args)
         {
-            JobdeskService jobdeskService = new JobdeskService();
-            jobdeskService.TampilkanMenu();
+            MenuService menuService = new MenuService();
+            menuService.TampilkanMenu();
         }
     }
 }
