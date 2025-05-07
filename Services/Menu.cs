@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Aplikasi_Absensi_Perusahaan.Api;
+using Aplikasi_Absensi_Perusahaan.Models;
+using System;
 using System.Collections.Generic;
 using AljabarLibrary;
 using Aplikasi_Absensi_Perusahaan.Models;
@@ -12,13 +14,58 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private LogManager<Karyawan> logManager = new();
 
         public void TampilkanMenu()
+        //private JobdeskApiSimulator jobdeskApi = new JobdeskApiSimulator();
+        private LoginApiSimulator loginApi = new LoginApiSimulator();
+
+        public void Mulai()
+        {
+            if (Login())
+            {
+                TampilkanMenu();
+            }
+            else
+            {
+                Console.WriteLine("Login gagal sebanyak 3 kali. Program berhenti.");
+            }
+        }
+
+        private bool Login()
+        {
+            Console.Clear();
+            Console.WriteLine("=== LOGIN SISTEM ABSENSI ===");
+
+            int percobaan = 0;
+            while (percobaan < 3)
+            {
+                Console.Write("email: ");
+                string email = Console.ReadLine();
+                Console.Write("Password: ");
+                string password = Console.ReadLine();
+
+                if (loginApi.Login(email, password))
+                {
+                    Console.WriteLine("Login berhasil!\nTekan ENTER untuk lanjut...");
+                    Console.ReadLine();
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Login gagal. email atau password salah.\n");
+                    percobaan++;
+                }
+            }
+
+            return false;
+        }
+
+        private void TampilkanMenu()
         {
             bool lanjut = true;
             while (lanjut)
             {
                 Console.Clear();
                 Console.WriteLine("=== SISTEM JOBDESK KARYAWAN ===");
-                Console.WriteLine("1. Melihat Jobdesk");
+                Console.WriteLine("1. Melihat Jobdesk (via API)");
                 Console.WriteLine("2. Melakukan Presensi");
                 Console.WriteLine("3. Mengelola Jobdesk Karyawan");
                 Console.WriteLine("4. Mengelola Data Karyawan");
@@ -29,13 +76,13 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 switch (input)
                 {
                     case "1":
-                        TambahJobdesk();
+                        LihatJobdeskViaApi();
                         break;
                     case "2":
-                        MenuPresensi(); // diganti ke menu absensi
+                        Console.WriteLine("Fitur presensi belum diimplementasi.");
                         break;
                     case "3":
-                        HapusJobdesk();
+                        Console.WriteLine("Fitur kelola jobdesk belum diimplementasi.");
                         break;
                     case "4":
                         TampilkanInnerMenu();
