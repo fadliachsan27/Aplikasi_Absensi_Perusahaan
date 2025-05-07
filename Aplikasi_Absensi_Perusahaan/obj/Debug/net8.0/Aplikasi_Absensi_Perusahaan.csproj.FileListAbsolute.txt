@@ -1,0 +1,15 @@
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.GeneratedMSBuildEditorConfig.editorconfig
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.AssemblyInfoInputs.cache
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.AssemblyInfo.cs
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.csproj.CoreCompileInputs.cache
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.sourcelink.json
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\bin\Debug\net8.0\Debug\net8.0\Aplikasi_Absensi_Perusahaan.exe
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\bin\Debug\net8.0\Debug\net8.0\Aplikasi_Absensi_Perusahaan.deps.json
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\bin\Debug\net8.0\Debug\net8.0\Aplikasi_Absensi_Perusahaan.runtimeconfig.json
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\bin\Debug\net8.0\Debug\net8.0\Aplikasi_Absensi_Perusahaan.dll
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\bin\Debug\net8.0\Debug\net8.0\Aplikasi_Absensi_Perusahaan.pdb
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.dll
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\refint\Aplikasi_Absensi_Perusahaan.dll
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.pdb
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\Aplikasi_Absensi_Perusahaan.genruntimeconfig.cache
+E:\Kuliah\Aplikasi_Absensi_Perusahaan\obj\Debug\net8.0\ref\Aplikasi_Absensi_Perusahaan.dll
