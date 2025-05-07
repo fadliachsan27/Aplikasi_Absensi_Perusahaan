@@ -7,8 +7,8 @@ namespace Aplikasi_Absensi_Perusahaan
     {
         static void Main(string[] args)
         {
-            MenuService menuService = new MenuService();
-            menuService.TampilkanMenu();
+            Menu menu = new Menu();
+            menu.TampilkanMenu();
         }
     }
 }

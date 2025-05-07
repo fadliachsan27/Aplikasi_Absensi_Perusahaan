@@ -118,15 +118,8 @@ namespace Aplikasi_Absensi_Perusahaan
                 return;
             }
 
-            Console.WriteLine("Status Karyawan:");
-            foreach (var pair in StatusMap)
-            {
-                Console.WriteLine($"{pair.Key}. {pair.Value}");
-            }
-            Console.Write("Pilih status (angka): ");
-            int status = int.Parse(Console.ReadLine());
 
-            var karyawanBaru = new Karyawan(id, nama, email, telepon, role, status, 0);
+            var karyawanBaru = new Karyawan(id, nama, email, telepon, role, 1, 0);
             kelolaData.TambahData(karyawanBaru);
             Console.WriteLine("Karyawan berhasil ditambahkan.");
         }
