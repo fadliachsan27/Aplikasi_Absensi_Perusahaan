@@ -15,9 +15,9 @@ namespace Aplikasi_Absensi_Perusahaan.Api
             daftarKaryawan = karyawanService.GetSampleKaryawan();
         }
 
-        public bool Login(string email_Karyawan, string password)
-        {
-            return daftarKaryawan.Any(k => k.Email_Karyawan == email_Karyawan && k.Password == password);
-        }
+        //public bool Login(string email_Karyawan, string password)
+        //{
+         //   return daftarKaryawan.Any(k => k.Email_Karyawan == email_Karyawan && k.Password == password);
+        //}
     }
 }

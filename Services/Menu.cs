@@ -13,12 +13,13 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private List<Karyawan> daftarKaryawan = new();
         private LogManager<Karyawan> logManager = new();
         MengelolaKaryawan mengelolaKaryawan = new MengelolaKaryawan();
+        JobdeskService jobdeskService = new JobdeskService();
+        Penggajihan penggajihan = new Penggajihan();
 
-        public void TampilkanMenu()
         //private JobdeskApiSimulator jobdeskApi = new JobdeskApiSimulator();
         private LoginApiSimulator loginApi = new LoginApiSimulator();
 
-        public void Mulai()
+       /* public void Mulai()
         {
             if (Login())
             {
@@ -28,9 +29,9 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             {
                 Console.WriteLine("Login gagal sebanyak 3 kali. Program berhenti.");
             }
-        }
+        }*/
 
-        private bool Login()
+/*        private bool Login()
         {
             Console.Clear();
             Console.WriteLine("=== LOGIN SISTEM ABSENSI ===");
@@ -57,9 +58,9 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             }
 
             return false;
-        }
+        }*/
 
-        private void TampilkanMenu()
+        public void TampilkanMenu()
         {
             bool lanjut = true;
             while (lanjut)
@@ -77,18 +78,21 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 switch (input)
                 {
                     case "1":
-                        LihatJobdeskViaApi();
+                        //LihatJobdeskViaApi();
                         break;
                     case "2":
-                        Console.WriteLine("Fitur presensi belum diimplementasi.");
+                        MenuPresensi();
                         break;
                     case "3":
-                        Console.WriteLine("Fitur kelola jobdesk belum diimplementasi.");
+                        jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
                         break;
                     case "4":
                         mengelolaKaryawan.TampilkanMenukaryawan();
                         break;
                     case "5":
+                        penggajihan.TampilkanMenuPenggajihan();
+                        break;
+                    case "6":
                         lanjut = false;
                         break;
                     default:
