@@ -1,19 +1,28 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Aplikasi_Absensi_Perusahaan.Models
 {
     public class Karyawan
     {
-        public string NIK { get; set; }
-        public string Nama { get; set; }
-        public Role Role { get; set; }
+        public int Id_Karyawan { get; set; }
+        public string Nama_Karyawan { get; set; }
+        public string Email_Karyawan { get; set; }
+        public string Phone_Karyawan { get; set; }
+        public int Role { get; set; }
+        public int Status { get; set; }
+        public int Gaji { get; set; }
+        public List<string> Jobdesks { get; set; }
 
-        // Updated constructor to accept 3 arguments
-        public Karyawan(string nik, string nama, Role role)
+        public Karyawan(int id_Karyawan, string nama_Karyawan, string email_Karyawan, string phone_Karyawan, int role, int status, int gaji)
         {
-            NIK = nik;
-            Nama = nama;
+            Id_Karyawan = id_Karyawan;
+            Nama_Karyawan = nama_Karyawan;
+            Email_Karyawan = email_Karyawan;
+            Phone_Karyawan = phone_Karyawan;
             Role = role;
+            Status = status;
+            Gaji = gaji;
+            Jobdesks = new List<string>();
         }
 
         public override string ToString()
