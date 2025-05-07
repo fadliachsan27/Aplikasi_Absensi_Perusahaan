@@ -27,7 +27,7 @@ namespace Aplikasi_Absensi_Perusahaan.Models
 
         public override string ToString()
         {
-            return $"{Nama} ({NIK}) - {Role}";
+            return $"{Nama_Karyawan} ({Id_Karyawan}) - {Role}";
         }
     }
 }
