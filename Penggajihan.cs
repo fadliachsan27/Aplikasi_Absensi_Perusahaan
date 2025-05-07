@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Aplikasi_Absensi_Perusahaan.Services
 {
-    public class PenggajihanService
+    public class Penggajihan
     {
         private enum State
         {
@@ -22,7 +22,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private List<Karyawan> daftarKaryawan;
         private Dictionary<State, Action> stateHandlers;
 
-        public PenggajihanService()
+        public Penggajihan()
         {
             karyawanService = new KaryawanService();
             daftarKaryawan = karyawanService.GetSampleKaryawan();
@@ -34,7 +34,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         {
             stateHandlers = new Dictionary<State, Action>
             {
-                { State.MenuUtama, TampilkanMenu },
+                { State.MenuUtama, TampilkanMenuPenggajihan },
                 { State.TampilkanGaji, TampilkanDataGaji },
                 { State.TambahGaji, TambahGaji },
                 { State.EditGaji, EditGaji },
@@ -59,7 +59,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             }
         }
 
-        private void TampilkanMenu()
+        public void TampilkanMenuPenggajihan()
         {
             Console.WriteLine("=== MENU PENGGAJIHAN ===");
             Console.WriteLine("1. Lihat Data Gaji");
@@ -86,7 +86,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             Console.WriteLine("=== DAFTAR GAJI KARYAWAN ===");
             foreach (var k in daftarKaryawan)
             {
-                Console.WriteLine($"ID: {k.Id_Karyawan} | Nama: {k.Nama_Karyawan} | Gaji: Rp {k.gaji:N0}");
+                Console.WriteLine($"ID: {k.Id_Karyawan} | Nama: {k.Nama_Karyawan} | Gaji: Rp {k.Gaji:N0}");
             }
         }
 
@@ -98,7 +98,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
                 if (karyawan != null)
                 {
-                    if (karyawan.gaji > 0)
+                    if (karyawan.Gaji > 0)
                     {
                         Console.WriteLine("Karyawan ini sudah memiliki gaji. Gunakan menu Edit jika ingin mengubah.");
                         return;
@@ -107,7 +107,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                     Console.Write($"Masukkan gaji untuk {karyawan.Nama_Karyawan}: Rp ");
                     if (int.TryParse(Console.ReadLine(), out int gaji))
                     {
-                        karyawan.gaji = gaji;
+                        karyawan.Gaji = gaji;
                         Console.WriteLine("Gaji berhasil ditambahkan.");
                     }
                     else
@@ -134,11 +134,11 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
                 if (karyawan != null)
                 {
-                    Console.WriteLine($"Gaji saat ini: Rp {karyawan.gaji:N0}");
+                    Console.WriteLine($"Gaji saat ini: Rp {karyawan.Gaji:N0}");
                     Console.Write("Masukkan gaji baru: Rp ");
                     if (int.TryParse(Console.ReadLine(), out int gajiBaru))
                     {
-                        karyawan.gaji = gajiBaru;
+                        karyawan.Gaji = gajiBaru;
                         Console.WriteLine("Gaji berhasil diperbarui.");
                     }
                     else
@@ -165,12 +165,12 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
                 if (karyawan != null)
                 {
-                    Console.WriteLine($"Gaji saat ini: Rp {karyawan.gaji:N0}");
+                    Console.WriteLine($"Gaji saat ini: Rp {karyawan.Gaji:N0}");
                     Console.Write("Apakah Anda yakin ingin menghapus gaji ini? (y/n): ");
                     string konfirmasi = Console.ReadLine().ToLower();
                     if (konfirmasi == "y")
                     {
-                        karyawan.gaji = 0;
+                        karyawan.Gaji = 0;
                         Console.WriteLine("Gaji berhasil dihapus.");
                     }
                     else
