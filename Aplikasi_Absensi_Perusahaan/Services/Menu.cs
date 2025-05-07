@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AljabarLibrary;
 using Aplikasi_Absensi_Perusahaan.Models;
 
+
 namespace Aplikasi_Absensi_Perusahaan.Services
 {
     internal class Menu
@@ -90,7 +91,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         kembali = true;
                         break;
                     default:
-                        Console.WriteLine("❌ Pilihan tidak valid.");
+                        Console.WriteLine("Pilihan tidak valid.");
                         break;
                 }
 
@@ -118,11 +119,11 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             {
                 Role role = (Role)roleInput;
                 daftarKaryawan.Add(new Karyawan(nik, nama, role));
-                Console.WriteLine("✅ Karyawan ditambahkan!");
+                Console.WriteLine("Karyawan ditambahkan!");
             }
             else
             {
-                Console.WriteLine("❌ Role tidak valid!");
+                Console.WriteLine("Role tidak valid!");
             }
         }
 
@@ -130,7 +131,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         {
             if (daftarKaryawan.Count == 0)
             {
-                Console.WriteLine("⚠️ Tidak ada karyawan terdaftar.");
+                Console.WriteLine("Tidak ada karyawan terdaftar.");
                 return null;
             }
 
@@ -146,7 +147,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 return daftarKaryawan[pilihan - 1];
             }
 
-            Console.WriteLine("❌ Pilihan tidak valid.");
+            Console.WriteLine("Pilihan tidak valid.");
             return null;
         }
 

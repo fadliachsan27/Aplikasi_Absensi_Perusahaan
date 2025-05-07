@@ -1,4 +1,4 @@
-﻿namespace AljabarLibrary
+﻿namespace Aplikasi_Absensi_Perusahaan.Models
 {
     public enum Role
     {
