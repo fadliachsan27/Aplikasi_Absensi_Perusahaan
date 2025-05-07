@@ -1,14 +1,10 @@
-﻿using System;
-using Aplikasi_Absensi_Perusahaan.Services;
+﻿using Aplikasi_Absensi_Perusahaan.Services;
 
-namespace Aplikasi_Absensi_Perusahaan
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Menu menu = new Menu();
-            menu.TampilkanMenu();
-        }
+        Menu menu = new Menu();
+        menu.Mulai(); // gunakan Mulai, bukan TampilkanMenu langsung
     }
 }
