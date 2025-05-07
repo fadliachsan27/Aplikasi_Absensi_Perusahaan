@@ -26,7 +26,7 @@ namespace Aplikasi_Absensi_Perusahaan
             kelolaData = new MengelolaData<Karyawan>(dataAwal);
         }
 
-        public void TampilkanMenu()
+        public void TampilkanMenukaryawan()
         {
             bool kembaliKeMenu = false;
 
