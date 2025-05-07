@@ -1,4 +1,5 @@
 ﻿using Aplikasi_Absensi_Perusahaan.Api;
+using Aplikasi_Absensi_Perusahaan.Models;
 using System;
 
 namespace Aplikasi_Absensi_Perusahaan.Services
@@ -28,12 +29,12 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             int percobaan = 0;
             while (percobaan < 3)
             {
-                Console.Write("Username: ");
-                string username = Console.ReadLine();
+                Console.Write("email: ");
+                string email = Console.ReadLine();
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
 
-                if (loginApi.Login(username, password))
+                if (loginApi.Login(email, password))
                 {
                     Console.WriteLine("Login berhasil!\nTekan ENTER untuk lanjut...");
                     Console.ReadLine();
@@ -41,7 +42,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 }
                 else
                 {
-                    Console.WriteLine("Login gagal. Username atau password salah.\n");
+                    Console.WriteLine("Login gagal. email atau password salah.\n");
                     percobaan++;
                 }
             }

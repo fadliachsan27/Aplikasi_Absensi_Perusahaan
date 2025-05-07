@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Aplikasi_Absensi_Perusahaan.Models;
+using Aplikasi_Absensi_Perusahaan.Services;
 
 namespace Aplikasi_Absensi_Perusahaan.Api
 {
     public class LoginApiSimulator
     {
-        // Dummy data: username dan password
-        private Dictionary<string, string> dummyUsers = new Dictionary<string, string>
-        {
-            { "admin", "admin123" },
-            { "karyawan1", "password1" },
-            { "karyawan2", "password2" }
-        };
+        private List<Karyawan> daftarKaryawan;
 
-        // Fungsi untuk melakukan login
-        public bool Login(string username, string password)
+        public LoginApiSimulator()
         {
-            if (dummyUsers.ContainsKey(username))
-            {
-                return dummyUsers[username] == password;
-            }
-            return false;
+            var karyawanService = new KaryawanService();
+            daftarKaryawan = karyawanService.GetSampleKaryawan();
+        }
+
+        public bool Login(string email_Karyawan, string password)
+        {
+            return daftarKaryawan.Any(k => k.Email_Karyawan == email_Karyawan && k.Password == password);
         }
     }
 }
