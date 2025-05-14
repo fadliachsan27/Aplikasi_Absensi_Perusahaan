@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using AljabarLibrary;
 using Aplikasi_Absensi_Perusahaan.Models;
-using Aplikasi_Absensi_Perusahaan.Services; // atau Models, tergantung letaknya 
+using Aplikasi_Absensi_Perusahaan.Services; // atau Models, tergantung letaknya
 
 
 
@@ -13,12 +13,15 @@ namespace Aplikasi_Absensi_Perusahaan.Services
     {
         private List<Karyawan> daftarKaryawan = new();
         private LogManager<Karyawan> logManager = new();
+        MengelolaKaryawan mengelolaKaryawan = new MengelolaKaryawan();
         JobdeskService jobdeskService = new JobdeskService();
-
-
-
+        
+ 
+       
         public void TampilkanMenu()
         {
+            bool lanjut = true;
+
             var kelola = new MengelolaKaryawan<Karyawan>();
             var karyawanService = new KaryawanService(); // ✅ ditambahkan
             var penggajihan = new Penggajihan(karyawanService); // ✅ gunakan konstruktor baru
@@ -54,7 +57,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         kelola.TampilkanMenukaryawan();
                         break;
                     case "5":
-                        penggajihan.TampilkanMenuUtama();
+                        penggajihan.TampilkanMenuPenggajihan();
                         break;
                     case "6":
                         lanjut = false;
