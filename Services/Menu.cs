@@ -1,5 +1,4 @@
-﻿using Aplikasi_Absensi_Perusahaan.Api;
-using Aplikasi_Absensi_Perusahaan.Models;
+﻿using Aplikasi_Absensi_Perusahaan.Models;
 using System;
 using System.Collections.Generic;
 using AljabarLibrary;
@@ -19,7 +18,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         Penggajihan penggajihan = new Penggajihan();
 
         //private JobdeskApiSimulator jobdeskApi = new JobdeskApiSimulator();
-        private LoginApiSimulator loginApi = new LoginApiSimulator();
+        /*private LoginApiSimulator loginApi = new LoginApiSimulator();*/
 
        /* public void Mulai()
         {
