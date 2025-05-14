@@ -10,25 +10,15 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private enum State
         {
             MenuUtama,
-            Keluar,
-            Karyawan_Lihat,
-            Karyawan_Tambah,
-            Karyawan_Edit,
-            Karyawan_Hapus,
-            Staff_Lihat,
-            Staff_Tambah,
-            Staff_Edit,
-            Staff_Hapus
+            Keluar
         }
 
         private State currentState;
         private List<object> dataKaryawan;
-        private List<object> dataStaff;
 
         public Penggajihan()
         {
-            dataKaryawan = new KaryawanService().GetSampleKaryawan().Cast<object>().ToList();
-            dataStaff = new StaffService().GetSampleStaff().Cast<object>().ToList();
+            dataKaryawan = new KaryawanService().GetSampleKaryawan()?.Cast<object>().ToList() ?? new List<object>();
             currentState = State.MenuUtama;
         }
 
@@ -39,49 +29,56 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 Console.Clear();
                 Console.WriteLine("=== MENU PENGGAJIHAN ===");
                 Console.WriteLine("1. Kelola Gaji Karyawan");
-                Console.WriteLine("2. Kelola Gaji Staff");
-                Console.WriteLine("3. Keluar");
+                Console.WriteLine("2. Keluar");
                 Console.Write("Pilihan: ");
                 string input = Console.ReadLine();
 
                 switch (input)
                 {
-                    case "1": KelolaEntity("Karyawan"); break;
-                    case "2": KelolaEntity("Staff"); break;
-                    case "3": currentState = State.Keluar; break;
-                    default: currentState = State.MenuUtama; break;
+                    case "1":
+                        KelolaKaryawan();
+                        break;
+                    case "2":
+                        currentState = State.Keluar;
+                        break;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid.");
+                        break;
                 }
             }
         }
 
-        private void KelolaEntity(string tipe)
+        private void KelolaKaryawan()
         {
             bool lanjut = true;
             while (lanjut)
             {
                 Console.Clear();
-                Console.WriteLine($"=== MENU {tipe.ToUpper()} ===");
+                Console.WriteLine("=== MENU PENGAJIHAN KARYAWAN ===");
                 Console.WriteLine("1. Lihat Gaji");
-                Console.WriteLine("2. Tambah Gaji");
-                Console.WriteLine("3. Edit Gaji");
-                Console.WriteLine("4. Hapus Gaji");
-                Console.WriteLine("5. Kembali");
+                Console.WriteLine("2. Edit Gaji");
+                Console.WriteLine("3. Hapus Gaji");
+                Console.WriteLine("4. Kembali");
                 Console.Write("Pilihan: ");
                 string input = Console.ReadLine();
 
-                var data = tipe == "Karyawan" ? dataKaryawan : dataStaff;
-                string idField = tipe == "Karyawan" ? "Id_Karyawan" : "Id_Staff";
-                string namaField = tipe == "Karyawan" ? "Nama_Karyawan" : "Nama_Staff";
-                string gajiField = "gaji";
-
                 switch (input)
                 {
-                    case "1": TampilkanData(data, idField, namaField, gajiField); break;
-                    case "2": TambahGaji(data, idField, namaField, gajiField); break;
-                    case "3": EditGaji(data, idField, namaField, gajiField); break;
-                    case "4": HapusGaji(data, idField, namaField, gajiField); break;
-                    case "5": lanjut = false; break;
-                    default: break;
+                    case "1":
+                        TampilkanData();
+                        break;
+                    case "2":
+                        EditGaji();
+                        break;
+                    case "3":
+                        HapusGaji();
+                        break;
+                    case "4":
+                        lanjut = false;
+                        break;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid.");
+                        break;
                 }
 
                 if (lanjut)
@@ -92,89 +89,81 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             }
         }
 
-        private void TampilkanData(List<object> data, string idField, string namaField, string gajiField)
+        private void TampilkanData()
         {
-            Console.WriteLine($"=== DAFTAR GAJI ===");
-            foreach (var item in data)
+            Console.WriteLine("=== DAFTAR GAJI KARYAWAN ===");
+            foreach (var item in dataKaryawan)
             {
                 var type = item.GetType();
-                var id = type.GetProperty(idField)?.GetValue(item);
-                var nama = type.GetProperty(namaField)?.GetValue(item);
-                var gaji = type.GetProperty(gajiField)?.GetValue(item);
-                Console.WriteLine($"ID: {id} | Nama: {nama} | Gaji: Rp {gaji:N0}");
+                var id = type.GetProperty("Id_Karyawan")?.GetValue(item);
+                var nama = type.GetProperty("Nama_Karyawan")?.GetValue(item);
+                var gaji = type.GetProperty("gaji")?.GetValue(item) ?? 0;
+                Console.WriteLine($"ID: {id} | Nama: {nama} | Gaji: Rp {Convert.ToInt32(gaji):N0}");
             }
         }
 
-        private void TambahGaji(List<object> data, string idField, string namaField, string gajiField)
+        private void EditGaji()
         {
-            Console.Write("Masukkan ID: ");
+            Console.Write("Masukkan ID Karyawan: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var item = data.FirstOrDefault(d => (int)d.GetType().GetProperty(idField)?.GetValue(d) == id);
+                var item = dataKaryawan.FirstOrDefault(d =>
+                    (int?)d.GetType().GetProperty("Id_Karyawan")?.GetValue(d) == id);
+
                 if (item != null)
                 {
-                    var gaji = (int)item.GetType().GetProperty(gajiField)?.GetValue(item);
-                    if (gaji > 0)
-                    {
-                        Console.WriteLine("Gaji sudah ada. Gunakan menu Edit.");
-                        return;
-                    }
-
-                    Console.Write("Masukkan Gaji: Rp ");
-                    if (int.TryParse(Console.ReadLine(), out int nilai))
-                    {
-                        item.GetType().GetProperty(gajiField)?.SetValue(item, nilai);
-                        Console.WriteLine("Gaji ditambahkan.");
-                    }
-                    else Console.WriteLine("Input tidak valid.");
-                }
-                else Console.WriteLine("Data tidak ditemukan.");
-            }
-            else Console.WriteLine("ID tidak valid.");
-        }
-
-        private void EditGaji(List<object> data, string idField, string namaField, string gajiField)
-        {
-            Console.Write("Masukkan ID: ");
-            if (int.TryParse(Console.ReadLine(), out int id))
-            {
-                var item = data.FirstOrDefault(d => (int)d.GetType().GetProperty(idField)?.GetValue(d) == id);
-                if (item != null)
-                {
-                    Console.WriteLine($"Gaji Saat Ini: Rp {item.GetType().GetProperty(gajiField)?.GetValue(item):N0}");
+                    var gajiSaatIni = Convert.ToInt32(item.GetType().GetProperty("gaji")?.GetValue(item) ?? 0);
+                    Console.WriteLine($"Gaji Saat Ini: Rp {gajiSaatIni:N0}");
                     Console.Write("Masukkan Gaji Baru: Rp ");
-                    if (int.TryParse(Console.ReadLine(), out int nilai))
+                    if (int.TryParse(Console.ReadLine(), out int nilaiBaru))
                     {
-                        item.GetType().GetProperty(gajiField)?.SetValue(item, nilai);
-                        Console.WriteLine("Gaji diperbarui.");
+                        item.GetType().GetProperty("gaji")?.SetValue(item, nilaiBaru);
+                        Console.WriteLine("Gaji berhasil diperbarui.");
                     }
-                    else Console.WriteLine("Input tidak valid.");
+                    else
+                    {
+                        Console.WriteLine("Input gaji tidak valid.");
+                    }
                 }
-                else Console.WriteLine("Data tidak ditemukan.");
+                else
+                {
+                    Console.WriteLine("Data tidak ditemukan.");
+                }
             }
-            else Console.WriteLine("ID tidak valid.");
+            else
+            {
+                Console.WriteLine("ID tidak valid.");
+            }
         }
 
-        private void HapusGaji(List<object> data, string idField, string namaField, string gajiField)
+        private void HapusGaji()
         {
-            Console.Write("Masukkan ID: ");
+            Console.Write("Masukkan ID Karyawan: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var item = data.FirstOrDefault(d => (int)d.GetType().GetProperty(idField)?.GetValue(d) == id);
+                var item = dataKaryawan.FirstOrDefault(d =>
+                    (int?)d.GetType().GetProperty("Id_Karyawan")?.GetValue(d) == id);
+
                 if (item != null)
                 {
-                    var gaji = (int)item.GetType().GetProperty(gajiField)?.GetValue(item);
-                    Console.WriteLine($"Gaji Saat Ini: Rp {gaji:N0}");
+                    var gajiSaatIni = Convert.ToInt32(item.GetType().GetProperty("gaji")?.GetValue(item) ?? 0);
+                    Console.WriteLine($"Gaji Saat Ini: Rp {gajiSaatIni:N0}");
                     Console.Write("Yakin ingin menghapus? (y/n): ");
                     if (Console.ReadLine().ToLower() == "y")
                     {
-                        item.GetType().GetProperty(gajiField)?.SetValue(item, 0);
-                        Console.WriteLine("Gaji dihapus.");
+                        item.GetType().GetProperty("gaji")?.SetValue(item, 0);
+                        Console.WriteLine("Gaji berhasil dihapus.");
                     }
                 }
-                else Console.WriteLine("Data tidak ditemukan.");
+                else
+                {
+                    Console.WriteLine("Data tidak ditemukan.");
+                }
             }
-            else Console.WriteLine("ID tidak valid.");
+            else
+            {
+                Console.WriteLine("ID tidak valid.");
+            }
         }
     }
 }
