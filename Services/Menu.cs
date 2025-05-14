@@ -41,10 +41,10 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         //LihatJobdeskViaApi(); 
                         break;
                     case "2":
-                       /* KaryawanService service = new KaryawanService();
+                        KaryawanService service = new KaryawanService();
                         daftarKaryawan = service.GetSampleKaryawan();
                         Presensi presensi = new Presensi(daftarKaryawan);
-                        presensi.PilihMenuPresensi();*/
+                        presensi.PilihMenuPresensi();
                         break;
                     case "3":
                         jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
@@ -69,64 +69,6 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                     Console.ReadLine();
                 }
             }
-        }
-
-        public void TampilkanInnerMenu()
-        {
-            bool lanjut = true;
-            while (lanjut)
-            {
-                Console.Clear();
-                Console.WriteLine("=== MENU DATA TAMBAHAN ===");
-                Console.WriteLine("1. Mengelola Presensi (alias tidak dipakai lagi)");
-                Console.WriteLine("2. Mengelola Penggajihan");
-                Console.WriteLine("3. Kembali");
-                Console.Write("Pilihan Anda: ");
-                string input = Console.ReadLine();
-
-                switch (input)
-                {
-                    case "1":
-                        Console.WriteLine("Fitur sudah dipindahkan ke menu utama.");
-                        break;
-                    case "2":
-                        Penggajihan();
-                        break;
-                    case "3":
-                        lanjut = false;
-                        break;
-                    default:
-                        Console.WriteLine("Pilihan tidak valid.");
-                        break;
-                }
-
-                if (lanjut)
-                {
-                    Console.WriteLine("\nTekan ENTER untuk kembali...");
-                    Console.ReadLine();
-                }
-            }
-        }
-
-        // Dummy methods placeholder 
-        private void TambahJobdesk()
-        {
-            Console.WriteLine("Fitur Tambah Jobdesk belum diimplementasikan.");
-        }
-
-        private void TampilkanJobdesk()
-        {
-            Console.WriteLine("Fitur Tampilkan Jobdesk belum diimplementasikan.");
-        }
-
-        private void HapusJobdesk()
-        {
-            Console.WriteLine("Fitur Hapus Jobdesk belum diimplementasikan.");
-        }
-
-        private void Penggajihan()
-        {
-            Console.WriteLine("Fitur Penggajihan belum diimplementasikan.");
         }
     }
 }
