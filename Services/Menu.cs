@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using AljabarLibrary;
 using Aplikasi_Absensi_Perusahaan.Models;
-using Aplikasi_Absensi_Perusahaan.Services; // atau Models, tergantung letaknya
+using Aplikasi_Absensi_Perusahaan.Services; // atau Models, tergantung letaknya 
 
 
 
@@ -13,20 +13,20 @@ namespace Aplikasi_Absensi_Perusahaan.Services
     {
         private List<Karyawan> daftarKaryawan = new();
         private LogManager<Karyawan> logManager = new();
-        MengelolaKaryawan mengelolaKaryawan = new MengelolaKaryawan();
         JobdeskService jobdeskService = new JobdeskService();
-        
- 
-       
+
+
+
         public void TampilkanMenu()
         {
-            bool lanjut = true;
+            
+
+                bool lanjut = true;
 
             var kelola = new MengelolaKaryawan<Karyawan>();
             var karyawanService = new KaryawanService(); // ✅ ditambahkan
             var penggajihan = new Penggajihan(karyawanService); // ✅ gunakan konstruktor baru
 
-            bool lanjut = true;
             while (lanjut)
             {
                 Console.Clear();
@@ -43,10 +43,11 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 switch (input)
                 {
                     case "1":
-                        //LihatJobdeskViaApi();
+                        //LihatJobdeskViaApi(); 
                         break;
                     case "2":
-                        daftarKaryawan = karyawanService.GetSampleKaryawan(); // ✅ pakai ulang objek
+                        KaryawanService service = new KaryawanService();
+                        daftarKaryawan = service.GetSampleKaryawan();
                         Presensi presensi = new Presensi(daftarKaryawan);
                         presensi.PilihMenuPresensi();
                         break;
@@ -54,10 +55,10 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
                         break;
                     case "4":
-                        kelola.TampilkanMenukaryawan();
+                        kelola.TampilkanMenukaryawan(); // ← hanya dipanggil jika user pilih opsi 4
                         break;
                     case "5":
-                        penggajihan.TampilkanMenuPenggajihan();
+                        penggajihan.TampilkanMenuUtama();
                         break;
                     case "6":
                         lanjut = false;
@@ -74,6 +75,5 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 }
             }
         }
-
     }
 }

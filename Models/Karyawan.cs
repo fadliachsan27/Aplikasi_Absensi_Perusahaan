@@ -18,9 +18,6 @@ namespace Aplikasi_Absensi_Perusahaan.Models
         public DateTime Waktu { get; set; }
         public string Tipe { get; set; }
 
-        // Tambahkan properti untuk Check-in dan Check-out 
-        public DateTime? CheckInTime { get; set; }
-        public DateTime? CheckOutTime { get; set; }
 
         public Karyawan(int id_Karyawan, string nama_Karyawan, string email_Karyawan, string phone_Karyawan, int role, int status, int gaji)
         {
