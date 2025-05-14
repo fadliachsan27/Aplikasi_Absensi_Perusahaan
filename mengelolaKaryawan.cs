@@ -22,8 +22,8 @@ namespace Aplikasi_Absensi_Perusahaan
 
         public MengelolaKaryawan()
         {
-         
             daftarKaryawan = karyawanService.GetSampleKaryawan().Cast<T>().ToList();
+            ResetIdKaryawan();
         }
 
         public void TampilkanMenukaryawan()
@@ -71,17 +71,19 @@ namespace Aplikasi_Absensi_Perusahaan
         private void TampilkanDaftarKaryawan()
         {
             Console.WriteLine("\n--- Daftar Karyawan ---");
+            int index = 1;
             foreach (var k in daftarKaryawan.Where(k => k.Role != 2))
             {
                 string status = StatusMap.ContainsKey(k.Status) ? StatusMap[k.Status] : "Tidak Diketahui";
-                Console.WriteLine($"{k.Id_Karyawan}. {k.Nama_Karyawan} - {k.Email_Karyawan} - {k.Phone_Karyawan} - Status: {status}");
+                Console.WriteLine($"{index}. {k.Nama_Karyawan} - {k.Email_Karyawan} - {k.Phone_Karyawan} - Status: {status}");
+                index++;
             }
         }
 
         private void TambahKaryawan()
         {
             Console.WriteLine("\n--- Tambah Karyawan ---");
-            int id = daftarKaryawan.Any() ? daftarKaryawan.Max(k => k.Id_Karyawan) + 1 : 1;
+            int id = daftarKaryawan.Count + 1;
 
             Console.Write("Nama: ");
             string nama = Console.ReadLine();
@@ -113,6 +115,7 @@ namespace Aplikasi_Absensi_Perusahaan
             if (instance is T karyawan)
             {
                 daftarKaryawan.Add(karyawan);
+                ResetIdKaryawan();
                 Console.WriteLine("Karyawan berhasil ditambahkan.");
             }
             else
@@ -124,61 +127,79 @@ namespace Aplikasi_Absensi_Perusahaan
         private void EditKaryawan()
         {
             TampilkanDaftarKaryawan();
-            Console.Write("\nMasukkan ID karyawan yang ingin diedit: ");
-            int.TryParse(Console.ReadLine(), out int id);
-            var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
+            Console.Write("\nMasukkan nomor urutan karyawan yang ingin diedit: ");
+            int.TryParse(Console.ReadLine(), out int nomor);
+            int index = nomor - 1;
 
-            if (karyawan == null)
+            var karyawanList = daftarKaryawan.Where(k => k.Role != 2).ToList();
+
+            if (index >= 0 && index < karyawanList.Count)
             {
-                Console.WriteLine("Karyawan tidak ditemukan.");
-                return;
+                var karyawan = karyawanList[index];
+
+                Console.WriteLine("[Kosongkan Jika Tidak Mau Diubah]");
+
+                Console.Write("Nama Baru: ");
+                string nama = Console.ReadLine();
+                if (!string.IsNullOrEmpty(nama)) karyawan.Nama_Karyawan = nama;
+
+                Console.Write("Email Baru: ");
+                string email = Console.ReadLine();
+                if (!string.IsNullOrEmpty(email)) karyawan.Email_Karyawan = email;
+
+                Console.Write("Telepon Baru: ");
+                string telepon = Console.ReadLine();
+                if (!string.IsNullOrEmpty(telepon)) karyawan.Phone_Karyawan = telepon;
+
+                Console.Write("Role Baru (angka): ");
+                int.TryParse(Console.ReadLine(), out int role);
+                if (role != 2) karyawan.Role = role;
+
+                Console.WriteLine("Status Baru:");
+                foreach (var s in StatusMap)
+                {
+                    Console.WriteLine($"{s.Key}. {s.Value}");
+                }
+                Console.Write("Pilih status (angka): ");
+                int.TryParse(Console.ReadLine(), out int statusBaru);
+                karyawan.Status = statusBaru;
+
+                Console.WriteLine("Karyawan berhasil diupdate.");
             }
-
-            Console.WriteLine("[Kosongkan Jika Tidak Mau Diubah]");
-
-            Console.Write("Nama Baru: ");
-            string nama = Console.ReadLine();
-            if (!string.IsNullOrEmpty(nama)) karyawan.Nama_Karyawan = nama;
-
-            Console.Write("Email Baru: ");
-            string email = Console.ReadLine();
-            if (!string.IsNullOrEmpty(email)) karyawan.Email_Karyawan = email;
-
-            Console.Write("Telepon Baru: ");
-            string telepon = Console.ReadLine();
-            if (!string.IsNullOrEmpty(telepon)) karyawan.Phone_Karyawan = telepon;
-
-            Console.Write("Role Baru (angka): ");
-            int.TryParse(Console.ReadLine(), out int role);
-            if (role != 2) karyawan.Role = role;
-
-            Console.WriteLine("Status Baru:");
-            foreach (var s in StatusMap)
+            else
             {
-                Console.WriteLine($"{s.Key}. {s.Value}");
+                Console.WriteLine("Nomor urutan tidak ditemukan.");
             }
-            Console.Write("Pilih status (angka): ");
-            int.TryParse(Console.ReadLine(), out int statusBaru);
-            karyawan.Status = statusBaru;
-
-            Console.WriteLine("Karyawan berhasil diupdate.");
         }
 
         private void HapusKaryawan()
         {
             TampilkanDaftarKaryawan();
-            Console.Write("\nMasukkan ID karyawan yang ingin dihapus: ");
-            int.TryParse(Console.ReadLine(), out int id);
-            var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
+            Console.Write("\nMasukkan nomor urutan karyawan yang ingin dihapus: ");
+            int.TryParse(Console.ReadLine(), out int nomor);
+            int index = nomor - 1;
 
-            if (karyawan != null)
+            var karyawanList = daftarKaryawan.Where(k => k.Role != 2).ToList();
+
+            if (index >= 0 && index < karyawanList.Count)
             {
+                var karyawan = karyawanList[index];
                 daftarKaryawan.Remove(karyawan);
+                ResetIdKaryawan();
                 Console.WriteLine("Karyawan berhasil dihapus.");
             }
             else
             {
-                Console.WriteLine("Karyawan tidak ditemukan.");
+                Console.WriteLine("Nomor urutan tidak ditemukan.");
+            }
+        }
+
+        private void ResetIdKaryawan()
+        {
+            int newId = 1;
+            foreach (var k in daftarKaryawan.Where(k => k.Role != 2))
+            {
+                k.Id_Karyawan = newId++;
             }
         }
     }
