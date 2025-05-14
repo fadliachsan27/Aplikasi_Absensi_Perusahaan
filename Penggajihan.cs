@@ -14,11 +14,11 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         }
 
         private State currentState;
-        private List<object> dataKaryawan;
+        private List<Karyawan> dataKaryawan;
 
-        public Penggajihan()
+        public Penggajihan(KaryawanService karyawanService)
         {
-            dataKaryawan = new KaryawanService().GetSampleKaryawan()?.Cast<object>().ToList() ?? new List<object>();
+            dataKaryawan = karyawanService.GetSampleKaryawan(); // gunakan referensi
             currentState = State.MenuUtama;
         }
 
@@ -54,7 +54,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             while (lanjut)
             {
                 Console.Clear();
-                Console.WriteLine("=== MENU PENGAJIHAN KARYAWAN ===");
+                Console.WriteLine("=== MENU PENGGAJIHAN KARYAWAN ===");
                 Console.WriteLine("1. Lihat Gaji");
                 Console.WriteLine("2. Edit Gaji");
                 Console.WriteLine("3. Hapus Gaji");
@@ -92,13 +92,9 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private void TampilkanData()
         {
             Console.WriteLine("=== DAFTAR GAJI KARYAWAN ===");
-            foreach (var item in dataKaryawan)
+            foreach (var k in dataKaryawan)
             {
-                var type = item.GetType();
-                var id = type.GetProperty("Id_Karyawan")?.GetValue(item);
-                var nama = type.GetProperty("Nama_Karyawan")?.GetValue(item);
-                var gaji = type.GetProperty("gaji")?.GetValue(item) ?? 0;
-                Console.WriteLine($"ID: {id} | Nama: {nama} | Gaji: Rp {Convert.ToInt32(gaji):N0}");
+                Console.WriteLine($"ID: {k.Id_Karyawan} | Nama: {k.Nama_Karyawan} | Gaji: Rp {k.Gaji:N0}");
             }
         }
 
@@ -107,17 +103,15 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             Console.Write("Masukkan ID Karyawan: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var item = dataKaryawan.FirstOrDefault(d =>
-                    (int?)d.GetType().GetProperty("Id_Karyawan")?.GetValue(d) == id);
+                var karyawan = dataKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
 
-                if (item != null)
+                if (karyawan != null)
                 {
-                    var gajiSaatIni = Convert.ToInt32(item.GetType().GetProperty("gaji")?.GetValue(item) ?? 0);
-                    Console.WriteLine($"Gaji Saat Ini: Rp {gajiSaatIni:N0}");
+                    Console.WriteLine($"Gaji Saat Ini: Rp {karyawan.Gaji:N0}");
                     Console.Write("Masukkan Gaji Baru: Rp ");
                     if (int.TryParse(Console.ReadLine(), out int nilaiBaru))
                     {
-                        item.GetType().GetProperty("gaji")?.SetValue(item, nilaiBaru);
+                        karyawan.Gaji = nilaiBaru;
                         Console.WriteLine("Gaji berhasil diperbarui.");
                     }
                     else
@@ -141,17 +135,15 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             Console.Write("Masukkan ID Karyawan: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var item = dataKaryawan.FirstOrDefault(d =>
-                    (int?)d.GetType().GetProperty("Id_Karyawan")?.GetValue(d) == id);
+                var karyawan = dataKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
 
-                if (item != null)
+                if (karyawan != null)
                 {
-                    var gajiSaatIni = Convert.ToInt32(item.GetType().GetProperty("gaji")?.GetValue(item) ?? 0);
-                    Console.WriteLine($"Gaji Saat Ini: Rp {gajiSaatIni:N0}");
+                    Console.WriteLine($"Gaji Saat Ini: Rp {karyawan.Gaji:N0}");
                     Console.Write("Yakin ingin menghapus? (y/n): ");
                     if (Console.ReadLine().ToLower() == "y")
                     {
-                        item.GetType().GetProperty("gaji")?.SetValue(item, 0);
+                        karyawan.Gaji = 0;
                         Console.WriteLine("Gaji berhasil dihapus.");
                     }
                 }
