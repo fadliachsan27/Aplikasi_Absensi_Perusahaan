@@ -11,7 +11,6 @@ namespace Aplikasi_Absensi_Perusahaan.Services
 
         public JobdeskService()
         {
-            // Inisialisasi data karyawan langsung di sini
             daftarKaryawan = new KaryawanService().GetSampleKaryawan();
         }
 
