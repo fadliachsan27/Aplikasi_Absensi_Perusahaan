@@ -37,33 +37,12 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             Console.Clear();
             Console.WriteLine("=== LOGIN SISTEM ABSENSI ===");
 
-            int percobaan = 0;
-            while (percobaan < 3)
-            {
-                Console.Write("email: ");
-                string email = Console.ReadLine();
-                Console.Write("Password: ");
-                string password = Console.ReadLine();
-
-                if (loginApi.Login(email, password))
-                {
-                    Console.WriteLine("Login berhasil!\nTekan ENTER untuk lanjut...");
-                    Console.ReadLine();
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("Login gagal. email atau password salah.\n");
-                    percobaan++;
-                }
-            }
-
-            return false;
-        }*/
-
         public void TampilkanMenu()
         {
             bool lanjut = true;
+
+            var kelola = new MengelolaKaryawan<Karyawan>();
+
             while (lanjut)
             {
                 Console.Clear();
@@ -89,7 +68,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
                         break;
                     case "4":
-                        mengelolaKaryawan.TampilkanMenukaryawan();
+                        kelola.TampilkanMenukaryawan();
                         break;
                     case "5":
                         penggajihan.TampilkanMenuPenggajihan();

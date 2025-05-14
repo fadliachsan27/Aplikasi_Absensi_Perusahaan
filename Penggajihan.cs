@@ -10,119 +10,95 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private enum State
         {
             MenuUtama,
-            TampilkanGaji,
-            TambahGaji,
-            EditGaji,
-            HapusGaji,
             Keluar
         }
 
         private State currentState;
-        private readonly KaryawanService karyawanService;
-        private List<Karyawan> daftarKaryawan;
-        private Dictionary<State, Action> stateHandlers;
+        private List<object> dataKaryawan;
 
         public Penggajihan()
         {
-            karyawanService = new KaryawanService();
-            daftarKaryawan = karyawanService.GetSampleKaryawan();
-            InitStateHandlers();
+            dataKaryawan = new KaryawanService().GetSampleKaryawan()?.Cast<object>().ToList() ?? new List<object>();
             currentState = State.MenuUtama;
         }
 
-        private void InitStateHandlers()
-        {
-            stateHandlers = new Dictionary<State, Action>
-            {
-                { State.MenuUtama, TampilkanMenuPenggajihan },
-                { State.TampilkanGaji, TampilkanDataGaji },
-                { State.TambahGaji, TambahGaji },
-                { State.EditGaji, EditGaji },
-                { State.HapusGaji, HapusGaji },
-                { State.Keluar, () => Console.WriteLine("Keluar dari aplikasi...") }
-            };
-        }
-
-        public void Jalankan()
+        public void TampilkanMenuUtama()
         {
             while (currentState != State.Keluar)
             {
                 Console.Clear();
-                stateHandlers[currentState].Invoke();
+                Console.WriteLine("=== MENU PENGGAJIHAN ===");
+                Console.WriteLine("1. Kelola Gaji Karyawan");
+                Console.WriteLine("2. Keluar");
+                Console.Write("Pilihan: ");
+                string input = Console.ReadLine();
 
-                if (currentState != State.Keluar)
+                switch (input)
                 {
-                    Console.WriteLine("\nTekan ENTER untuk melanjutkan...");
-                    Console.ReadLine();
-                    currentState = State.MenuUtama;
+                    case "1":
+                        KelolaKaryawan();
+                        break;
+                    case "2":
+                        currentState = State.Keluar;
+                        break;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid.");
+                        break;
                 }
             }
         }
 
-        public void TampilkanMenuPenggajihan()
+        private void KelolaKaryawan()
         {
-            Console.WriteLine("=== MENU PENGGAJIHAN ===");
-            Console.WriteLine("1. Lihat Data Gaji");
-            Console.WriteLine("2. Tambah Gaji");
-            Console.WriteLine("3. Edit Gaji");
-            Console.WriteLine("4. Hapus Gaji");
-            Console.WriteLine("5. Keluar");
-            Console.Write("Pilihan Anda: ");
-            string input = Console.ReadLine();
-
-            currentState = input switch
+            bool lanjut = true;
+            while (lanjut)
             {
-                "1" => State.TampilkanGaji,
-                "2" => State.TambahGaji,
-                "3" => State.EditGaji,
-                "4" => State.HapusGaji,
-                "5" => State.Keluar,
-                _ => State.MenuUtama
-            };
+                Console.Clear();
+                Console.WriteLine("=== MENU PENGAJIHAN KARYAWAN ===");
+                Console.WriteLine("1. Lihat Gaji");
+                Console.WriteLine("2. Edit Gaji");
+                Console.WriteLine("3. Hapus Gaji");
+                Console.WriteLine("4. Kembali");
+                Console.Write("Pilihan: ");
+                string input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        TampilkanData();
+                        break;
+                    case "2":
+                        EditGaji();
+                        break;
+                    case "3":
+                        HapusGaji();
+                        break;
+                    case "4":
+                        lanjut = false;
+                        break;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid.");
+                        break;
+                }
+
+                if (lanjut)
+                {
+                    Console.WriteLine("\nTekan ENTER untuk kembali...");
+                    Console.ReadLine();
+                }
+            }
         }
 
-        private void TampilkanDataGaji()
+        private void TampilkanData()
         {
             Console.WriteLine("=== DAFTAR GAJI KARYAWAN ===");
-            foreach (var k in daftarKaryawan)
+            foreach (var item in dataKaryawan)
             {
-                Console.WriteLine($"ID: {k.Id_Karyawan} | Nama: {k.Nama_Karyawan} | Gaji: Rp {k.Gaji:N0}");
-            }
-        }
-
-        private void TambahGaji()
-        {
-            Console.Write("Masukkan ID Karyawan: ");
-            if (int.TryParse(Console.ReadLine(), out int id))
-            {
-                var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
-                if (karyawan != null)
-                {
-                    if (karyawan.Gaji > 0)
-                    {
-                        Console.WriteLine("Karyawan ini sudah memiliki gaji. Gunakan menu Edit jika ingin mengubah.");
-                        return;
-                    }
-
-                    Console.Write($"Masukkan gaji untuk {karyawan.Nama_Karyawan}: Rp ");
-                    if (int.TryParse(Console.ReadLine(), out int gaji))
-                    {
-                        karyawan.Gaji = gaji;
-                        Console.WriteLine("Gaji berhasil ditambahkan.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Input tidak valid.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Karyawan tidak ditemukan.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("ID tidak valid.");
+                var type = item.GetType();
+                var id = type.GetProperty("Id_Karyawan")?.GetValue(item);
+                var nama = type.GetProperty("Nama_Karyawan")?.GetValue(item);
+                var gaji = type.GetProperty("gaji")?.GetValue(item) ?? 0;
+                Console.WriteLine($"ID: {id} | Nama: {nama} | Gaji: Rp {Convert.ToInt32(gaji):N0}");
             }
         }
 
@@ -131,24 +107,27 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             Console.Write("Masukkan ID Karyawan: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
-                if (karyawan != null)
+                var item = dataKaryawan.FirstOrDefault(d =>
+                    (int?)d.GetType().GetProperty("Id_Karyawan")?.GetValue(d) == id);
+
+                if (item != null)
                 {
-                    Console.WriteLine($"Gaji saat ini: Rp {karyawan.Gaji:N0}");
-                    Console.Write("Masukkan gaji baru: Rp ");
-                    if (int.TryParse(Console.ReadLine(), out int gajiBaru))
+                    var gajiSaatIni = Convert.ToInt32(item.GetType().GetProperty("gaji")?.GetValue(item) ?? 0);
+                    Console.WriteLine($"Gaji Saat Ini: Rp {gajiSaatIni:N0}");
+                    Console.Write("Masukkan Gaji Baru: Rp ");
+                    if (int.TryParse(Console.ReadLine(), out int nilaiBaru))
                     {
-                        karyawan.Gaji = gajiBaru;
+                        item.GetType().GetProperty("gaji")?.SetValue(item, nilaiBaru);
                         Console.WriteLine("Gaji berhasil diperbarui.");
                     }
                     else
                     {
-                        Console.WriteLine("Input tidak valid.");
+                        Console.WriteLine("Input gaji tidak valid.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Karyawan tidak ditemukan.");
+                    Console.WriteLine("Data tidak ditemukan.");
                 }
             }
             else
@@ -162,25 +141,23 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             Console.Write("Masukkan ID Karyawan: ");
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
-                if (karyawan != null)
+                var item = dataKaryawan.FirstOrDefault(d =>
+                    (int?)d.GetType().GetProperty("Id_Karyawan")?.GetValue(d) == id);
+
+                if (item != null)
                 {
-                    Console.WriteLine($"Gaji saat ini: Rp {karyawan.Gaji:N0}");
-                    Console.Write("Apakah Anda yakin ingin menghapus gaji ini? (y/n): ");
-                    string konfirmasi = Console.ReadLine().ToLower();
-                    if (konfirmasi == "y")
+                    var gajiSaatIni = Convert.ToInt32(item.GetType().GetProperty("gaji")?.GetValue(item) ?? 0);
+                    Console.WriteLine($"Gaji Saat Ini: Rp {gajiSaatIni:N0}");
+                    Console.Write("Yakin ingin menghapus? (y/n): ");
+                    if (Console.ReadLine().ToLower() == "y")
                     {
-                        karyawan.Gaji = 0;
+                        item.GetType().GetProperty("gaji")?.SetValue(item, 0);
                         Console.WriteLine("Gaji berhasil dihapus.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Penghapusan dibatalkan.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Karyawan tidak ditemukan.");
+                    Console.WriteLine("Data tidak ditemukan.");
                 }
             }
             else
