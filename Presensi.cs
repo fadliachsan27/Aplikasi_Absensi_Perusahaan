@@ -111,6 +111,8 @@ namespace Aplikasi_Absensi_Perusahaan
             }
         }
 
+
+
         private void CheckIn(int karyawanIndex)
         {
             var karyawan = daftarKaryawan[karyawanIndex];
