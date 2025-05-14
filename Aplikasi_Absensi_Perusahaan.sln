@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aplikasi_Absensi_Perusahaan", "Aplikasi_Absensi_Perusahaan.csproj", "{304DD612-E571-4BC4-A659-B64BCA1233D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEKAPI", "..\SEKAPI\SEKAPI.csproj", "{939F52A8-6DC4-47A5-A0FD-0EE5F5DE9F86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "..\ClassLibrary1\ClassLibrary1.csproj", "{77C3B4AB-50FA-47AE-B16D-C24926D5BEC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{304DD612-E571-4BC4-A659-B64BCA1233D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{304DD612-E571-4BC4-A659-B64BCA1233D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{304DD612-E571-4BC4-A659-B64BCA1233D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{939F52A8-6DC4-47A5-A0FD-0EE5F5DE9F86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{939F52A8-6DC4-47A5-A0FD-0EE5F5DE9F86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{939F52A8-6DC4-47A5-A0FD-0EE5F5DE9F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{939F52A8-6DC4-47A5-A0FD-0EE5F5DE9F86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C3B4AB-50FA-47AE-B16D-C24926D5BEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C3B4AB-50FA-47AE-B16D-C24926D5BEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C3B4AB-50FA-47AE-B16D-C24926D5BEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C3B4AB-50FA-47AE-B16D-C24926D5BEC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
