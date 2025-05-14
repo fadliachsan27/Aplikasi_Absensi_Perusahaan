@@ -14,13 +14,15 @@ namespace Aplikasi_Absensi_Perusahaan.Services
         private List<Karyawan> daftarKaryawan = new();
         private LogManager<Karyawan> logManager = new();
         JobdeskService jobdeskService = new JobdeskService();
-        
- 
-       
+
+
+
         public void TampilkanMenu()
         {
             var kelola = new MengelolaKaryawan<Karyawan>();
-            var penggajihan = new Penggajihan();
+            var karyawanService = new KaryawanService(); // ✅ ditambahkan
+            var penggajihan = new Penggajihan(karyawanService); // ✅ gunakan konstruktor baru
+
             bool lanjut = true;
             while (lanjut)
             {
@@ -38,11 +40,10 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 switch (input)
                 {
                     case "1":
-                        //LihatJobdeskViaApi(); 
+                        //LihatJobdeskViaApi();
                         break;
                     case "2":
-                        KaryawanService service = new KaryawanService();
-                        daftarKaryawan = service.GetSampleKaryawan();
+                        daftarKaryawan = karyawanService.GetSampleKaryawan(); // ✅ pakai ulang objek
                         Presensi presensi = new Presensi(daftarKaryawan);
                         presensi.PilihMenuPresensi();
                         break;
@@ -50,7 +51,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
                         break;
                     case "4":
-                        kelola.TampilkanMenukaryawan(); // ← hanya dipanggil jika user pilih opsi 4
+                        kelola.TampilkanMenukaryawan();
                         break;
                     case "5":
                         penggajihan.TampilkanMenuUtama();
@@ -70,5 +71,6 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 }
             }
         }
+
     }
 }
