@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Aplikasi_Absensi_Perusahaan.Models;
+using System;
 using System.Collections.Generic;
 using AljabarLibrary;
 using Aplikasi_Absensi_Perusahaan.Models;
+using Aplikasi_Absensi_Perusahaan.Services; // atau Models, tergantung letaknya
+
 
 
 namespace Aplikasi_Absensi_Perusahaan.Services
@@ -10,7 +13,29 @@ namespace Aplikasi_Absensi_Perusahaan.Services
     {
         private List<Karyawan> daftarKaryawan = new();
         private LogManager<Karyawan> logManager = new();
-        
+        MengelolaKaryawan mengelolaKaryawan = new MengelolaKaryawan();
+        JobdeskService jobdeskService = new JobdeskService();
+        Penggajihan penggajihan = new Penggajihan();
+
+        //private JobdeskApiSimulator jobdeskApi = new JobdeskApiSimulator();
+        /*private LoginApiSimulator loginApi = new LoginApiSimulator();*/
+
+       /* public void Mulai()
+        {
+            if (Login())
+            {
+                TampilkanMenu();
+            }
+            else
+            {
+                Console.WriteLine("Login gagal sebanyak 3 kali. Program berhenti.");
+            }
+        }*/
+
+/*        private bool Login()
+        {
+            Console.Clear();
+            Console.WriteLine("=== LOGIN SISTEM ABSENSI ===");
 
         public void TampilkanMenu()
         {
@@ -22,29 +47,33 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             {
                 Console.Clear();
                 Console.WriteLine("=== SISTEM JOBDESK KARYAWAN ===");
-                Console.WriteLine("1. Melihat Jobdesk");
+                Console.WriteLine("1. Melihat Jobdesk (via API)");
                 Console.WriteLine("2. Melakukan Presensi");
                 Console.WriteLine("3. Mengelola Jobdesk Karyawan");
                 Console.WriteLine("4. Mengelola Data Karyawan");
-                Console.WriteLine("5. Keluar");
+                Console.WriteLine("5. Mengelola Penggajihan");
+                Console.WriteLine("6. Keluar");
                 Console.Write("Pilihan Anda: ");
                 string input = Console.ReadLine();
 
                 switch (input)
                 {
                     case "1":
-                        TambahJobdesk();
+                        //LihatJobdeskViaApi();
                         break;
                     case "2":
-                        MenuPresensi(); // diganti ke menu absensi
+                        MenuPresensi();
                         break;
                     case "3":
-                        HapusJobdesk();
+                        jobdeskService.TampilkanMenuJobdesk(daftarKaryawan);
                         break;
                     case "4":
                         kelola.TampilkanMenukaryawan();
                         break;
                     case "5":
+                        penggajihan.TampilkanMenuPenggajihan();
+                        break;
+                    case "6":
                         lanjut = false;
                         break;
                     default:

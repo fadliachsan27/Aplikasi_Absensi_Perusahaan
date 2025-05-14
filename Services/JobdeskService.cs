@@ -7,10 +7,27 @@ namespace Aplikasi_Absensi_Perusahaan.Services
     public class JobdeskService
     {
         private List<string> jobdeskList = new List<string>();
+        private List<Karyawan> daftarKaryawan;
+
+        public JobdeskService()
+        {
+            // Inisialisasi data karyawan langsung di sini
+            daftarKaryawan = new KaryawanService().GetSampleKaryawan();
+        }
 
         public void TampilkanMenuJobdesk(List<Karyawan> daftarKaryawan)
         {
             bool lanjut = true;
+
+            var menuActions = new Dictionary<string, Action>
+    {
+        { "1", () => TambahJobdesk() },
+        { "2", () => TampilkanJobdesk() },
+        { "3", () => HapusJobdesk() },
+        { "4", () => BerikanJobdeskKeKaryawan() },
+        { "5", () => TampilkanJobdeskKaryawan() }
+    };
+
             while (lanjut)
             {
                 Console.Clear();
@@ -24,29 +41,17 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 Console.Write("Pilihan Anda: ");
                 string input = Console.ReadLine();
 
-                switch (input)
+                if (input == "6")
                 {
-                    case "1":
-                        TambahJobdesk();
-                        break;
-                    case "2":
-                        TampilkanJobdesk();
-                        break;
-                    case "3":
-                        HapusJobdesk();
-                        break;
-                    case "4":
-                        BerikanJobdeskKeKaryawan(daftarKaryawan);
-                        break;
-                    case "5":
-                        TampilkanJobdeskKaryawan(daftarKaryawan);
-                        break;
-                    case "6":
-                        lanjut = false;
-                        break;
-                    default:
-                        Console.WriteLine("Pilihan tidak valid.");
-                        break;
+                    lanjut = false;
+                }
+                else if (menuActions.ContainsKey(input))
+                {
+                    menuActions[input].Invoke();
+                }
+                else
+                {
+                    Console.WriteLine("Pilihan tidak valid.");
                 }
 
                 if (lanjut)
@@ -56,6 +61,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                 }
             }
         }
+
 
         public void TambahJobdesk()
         {
@@ -110,7 +116,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             }
         }
 
-        public void BerikanJobdeskKeKaryawan(List<Karyawan> daftarKaryawan)
+        public void BerikanJobdeskKeKaryawan()
         {
             Console.WriteLine("Pilih Karyawan:");
             for (int i = 0; i < daftarKaryawan.Count; i++)
@@ -147,7 +153,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
             }
         }
 
-        public void TampilkanJobdeskKaryawan(List<Karyawan> daftarKaryawan)
+        public void TampilkanJobdeskKaryawan()
         {
             Console.WriteLine("Pilih Karyawan:");
             for (int i = 0; i < daftarKaryawan.Count; i++)
@@ -175,6 +181,14 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         }
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Nomor karyawan tidak valid.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Input bukan angka.");
             }
         }
     }
