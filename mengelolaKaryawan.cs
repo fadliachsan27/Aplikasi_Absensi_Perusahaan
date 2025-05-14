@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Aplikasi_Absensi_Perusahaan
 {
-    public class MengelolaKaryawan
+    public class MengelolaKaryawan<T> where T : Karyawan
     {
-        private MengelolaData<Karyawan> kelolaData;
-        private readonly KaryawanService karyawanService = new KaryawanService();
+        private List<T> daftarKaryawan;
+        private readonly KaryawanService karyawanService = new();
 
-        private static readonly Dictionary<int, string> StatusMap = new Dictionary<int, string>
+        private static readonly Dictionary<int, string> StatusMap = new()
         {
             { 1, "Pending" },
             { 2, "Hadir" },
@@ -22,15 +22,24 @@ namespace Aplikasi_Absensi_Perusahaan
 
         public MengelolaKaryawan()
         {
-            var dataAwal = karyawanService.GetSampleKaryawan();
-            kelolaData = new MengelolaData<Karyawan>(dataAwal);
+         
+            daftarKaryawan = karyawanService.GetSampleKaryawan().Cast<T>().ToList();
         }
 
         public void TampilkanMenukaryawan()
         {
-            bool kembaliKeMenu = false;
+            bool kembali = false;
 
-            while (!kembaliKeMenu)
+            var menu = new Dictionary<string, Action>
+            {
+                { "1", TampilkanDaftarKaryawan },
+                { "2", TambahKaryawan },
+                { "3", EditKaryawan },
+                { "4", HapusKaryawan },
+                { "5", () => kembali = true }
+            };
+
+            while (!kembali)
             {
                 Console.Clear();
                 Console.WriteLine("=== MENU MENGELOLA KARYAWAN ===");
@@ -42,19 +51,9 @@ namespace Aplikasi_Absensi_Perusahaan
                 Console.Write("Pilih menu: ");
                 var input = Console.ReadLine();
 
-                var menuActions = new Dictionary<string, Action>
+                if (menu.TryGetValue(input, out var aksi))
                 {
-                    { "1", TampilkanDaftarKaryawan },
-                    { "2", TambahKaryawan },
-                    { "3", EditKaryawan },
-                    { "4", HapusKaryawan },
-                    { "5", () => kembaliKeMenu = true }
-                };
-
-                if (menuActions.ContainsKey(input))
-                {
-                    menuActions[input].Invoke();
-
+                    aksi.Invoke();
                     if (input != "5")
                     {
                         Console.WriteLine("\nTekan ENTER untuk melanjutkan...");
@@ -63,134 +62,118 @@ namespace Aplikasi_Absensi_Perusahaan
                 }
                 else
                 {
-                    Console.WriteLine("Pilihan tidak valid!");
+                    Console.WriteLine("Pilihan tidak valid.");
                     Console.ReadLine();
                 }
             }
         }
 
-        private string GetStatusText(int status)
-        {
-            return StatusMap.ContainsKey(status) ? StatusMap[status] : "Tidak Diketahui";
-        }
-
         private void TampilkanDaftarKaryawan()
         {
-            Console.WriteLine("\n--- Daftar Karyawan (Role 1) ---");
-            kelolaData.TampilkanData(k =>
+            Console.WriteLine("\n--- Daftar Karyawan ---");
+            foreach (var k in daftarKaryawan.Where(k => k.Role != 2))
             {
-                if (k.Role != 2)
-                {
-                    Console.WriteLine($"{k.Id_Karyawan}. {k.Nama_Karyawan} - {k.Email_Karyawan} - {k.Phone_Karyawan} - Status: {GetStatusText(k.Status)}");
-                }
-            });
+                string status = StatusMap.ContainsKey(k.Status) ? StatusMap[k.Status] : "Tidak Diketahui";
+                Console.WriteLine($"{k.Id_Karyawan}. {k.Nama_Karyawan} - {k.Email_Karyawan} - {k.Phone_Karyawan} - Status: {status}");
+            }
         }
 
         private void TambahKaryawan()
         {
-            Console.WriteLine("\n--- Tambah Karyawan Baru ---");
-            var semua = kelolaData.GetSemuaData();
-            int id = semua.Any() ? semua.Max(k => k.Id_Karyawan) + 1 : 1;
+            Console.WriteLine("\n--- Tambah Karyawan ---");
+            int id = daftarKaryawan.Any() ? daftarKaryawan.Max(k => k.Id_Karyawan) + 1 : 1;
 
             Console.Write("Nama: ");
             string nama = Console.ReadLine();
+
             Console.Write("Email: ");
             string email = Console.ReadLine();
+
             Console.Write("Telepon: ");
             string telepon = Console.ReadLine();
+
             Console.Write("Role (angka): ");
+            int.TryParse(Console.ReadLine(), out int role);
 
-            if (!int.TryParse(Console.ReadLine(), out int role))
+            if (role == 2 || role == 3)
             {
-                Console.WriteLine("Role tidak valid. Harus berupa angka.");
-                return;
-            }
-
-            if (role == 2)
-            {
-                Console.WriteLine("Role 2 tidak diperbolehkan. Role ini hanya untuk staff dan tidak dapat ditambahkan.");
-                return;
-            }
-
-            if (role == 3)
-            {
-                Console.WriteLine("Role 3 tidak diperbolehkan. Role ini hanya untuk manager dan tidak dapat ditambahkan.");
+                Console.WriteLine("Role 2 dan 3 tidak diperbolehkan.");
                 return;
             }
 
             Console.WriteLine("Status Karyawan:");
-            foreach (var pair in StatusMap)
+            foreach (var s in StatusMap)
             {
-                Console.WriteLine($"{pair.Key}. {pair.Value}");
+                Console.WriteLine($"{s.Key}. {s.Value}");
             }
             Console.Write("Pilih status (angka): ");
-            int status = int.Parse(Console.ReadLine());
+            int.TryParse(Console.ReadLine(), out int status);
 
-            var karyawanBaru = new Karyawan(id, nama, email, telepon, role, status, 0);
-            kelolaData.TambahData(karyawanBaru);
-            Console.WriteLine("Karyawan berhasil ditambahkan.");
+            var instance = Activator.CreateInstance(typeof(T), id, nama, email, telepon, role, status, 0);
+            if (instance is T karyawan)
+            {
+                daftarKaryawan.Add(karyawan);
+                Console.WriteLine("Karyawan berhasil ditambahkan.");
+            }
+            else
+            {
+                Console.WriteLine("Gagal menambahkan karyawan.");
+            }
         }
 
         private void EditKaryawan()
         {
             TampilkanDaftarKaryawan();
             Console.Write("\nMasukkan ID karyawan yang ingin diedit: ");
-            int id = int.Parse(Console.ReadLine());
+            int.TryParse(Console.ReadLine(), out int id);
+            var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
 
-            kelolaData.UpdateData(k => k.Id_Karyawan == id, karyawan =>
-            {
-                Console.Write("Nama Baru (kosongkan jika tidak diubah): ");
-                string nama = Console.ReadLine();
-                if (!string.IsNullOrEmpty(nama)) karyawan.Nama_Karyawan = nama;
-
-                Console.Write("Email Baru: ");
-                string email = Console.ReadLine();
-                if (!string.IsNullOrEmpty(email)) karyawan.Email_Karyawan = email;
-
-                Console.Write("Telepon Baru: ");
-                string telepon = Console.ReadLine();
-                if (!string.IsNullOrEmpty(telepon)) karyawan.Phone_Karyawan = telepon;
-
-                Console.Write("Role Baru (angka): ");
-                if (int.TryParse(Console.ReadLine(), out int role))
-                {
-                    if (role == 2)
-                    {
-                        Console.WriteLine("Role 2 tidak diperbolehkan untuk diedit. Role ini hanya untuk staff.");
-                    }
-                    else
-                    {
-                        karyawan.Role = role;
-                    }
-                }
-
-                Console.WriteLine("Status Baru:");
-                foreach (var pair in StatusMap)
-                {
-                    Console.WriteLine($"{pair.Key}. {pair.Value}");
-                }
-                Console.Write("Pilih status (angka): ");
-                if (int.TryParse(Console.ReadLine(), out int status)) karyawan.Status = status;
-
-                Console.WriteLine("Karyawan berhasil diupdate.");
-            });
-
-            if (kelolaData.CariData(k => k.Id_Karyawan == id) == null)
+            if (karyawan == null)
             {
                 Console.WriteLine("Karyawan tidak ditemukan.");
+                return;
             }
+
+            Console.WriteLine("[Kosongkan Jika Tidak Mau Diubah]");
+
+            Console.Write("Nama Baru: ");
+            string nama = Console.ReadLine();
+            if (!string.IsNullOrEmpty(nama)) karyawan.Nama_Karyawan = nama;
+
+            Console.Write("Email Baru: ");
+            string email = Console.ReadLine();
+            if (!string.IsNullOrEmpty(email)) karyawan.Email_Karyawan = email;
+
+            Console.Write("Telepon Baru: ");
+            string telepon = Console.ReadLine();
+            if (!string.IsNullOrEmpty(telepon)) karyawan.Phone_Karyawan = telepon;
+
+            Console.Write("Role Baru (angka): ");
+            int.TryParse(Console.ReadLine(), out int role);
+            if (role != 2) karyawan.Role = role;
+
+            Console.WriteLine("Status Baru:");
+            foreach (var s in StatusMap)
+            {
+                Console.WriteLine($"{s.Key}. {s.Value}");
+            }
+            Console.Write("Pilih status (angka): ");
+            int.TryParse(Console.ReadLine(), out int statusBaru);
+            karyawan.Status = statusBaru;
+
+            Console.WriteLine("Karyawan berhasil diupdate.");
         }
 
         private void HapusKaryawan()
         {
             TampilkanDaftarKaryawan();
             Console.Write("\nMasukkan ID karyawan yang ingin dihapus: ");
-            int id = int.Parse(Console.ReadLine());
+            int.TryParse(Console.ReadLine(), out int id);
+            var karyawan = daftarKaryawan.FirstOrDefault(k => k.Id_Karyawan == id);
 
-            var ditemukan = kelolaData.CariData(k => k.Id_Karyawan == id);
-            if (ditemukan != null)
+            if (karyawan != null)
             {
-                kelolaData.HapusData(k => k.Id_Karyawan == id);
+                daftarKaryawan.Remove(karyawan);
                 Console.WriteLine("Karyawan berhasil dihapus.");
             }
             else

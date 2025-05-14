@@ -10,11 +10,14 @@ namespace Aplikasi_Absensi_Perusahaan.Services
     {
         private List<Karyawan> daftarKaryawan = new();
         private LogManager<Karyawan> logManager = new();
-        MengelolaKaryawan mengelolaKaryawan = new MengelolaKaryawan();
+        
 
         public void TampilkanMenu()
         {
             bool lanjut = true;
+
+            var kelola = new MengelolaKaryawan<Karyawan>();
+
             while (lanjut)
             {
                 Console.Clear();
@@ -39,7 +42,7 @@ namespace Aplikasi_Absensi_Perusahaan.Services
                         HapusJobdesk();
                         break;
                     case "4":
-                        mengelolaKaryawan.TampilkanMenukaryawan();
+                        kelola.TampilkanMenukaryawan();
                         break;
                     case "5":
                         lanjut = false;
